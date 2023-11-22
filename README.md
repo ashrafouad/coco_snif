@@ -1,3 +1,3 @@
 # Coco Snif
 
-> NOTE: this is not coco melon
+> Comparing local data with online data.
