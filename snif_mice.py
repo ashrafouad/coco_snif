@@ -204,7 +204,7 @@ def junk_field(t: tuple[str, str]) -> bool:
     Returns:
         bool: `True` if the field is junk
     """
-    return re.sub("\W", "", t[0]) and re.sub("\W", "", t[1])  # type: ignore
+    return re.sub(r"\W", "", t[0]) and re.sub(r"\W", "", t[1])  # type: ignore
 
 
 def table_to_aos(table):
@@ -356,14 +356,6 @@ def warranty_from_page(page):
 
     return res
 
-
-COMPANIES_LIST = [
-    "شركة الصناعات الهندسية الثقيلة وبناء السف",
-    "شركة الصناعات الهندسية الثقيلة وبناء السفن / مساهمة عامة",
-    "شركة الخليج للانشاءات والاعمال البحرية والمقاولات العامة ش م ك م",
-]
-
-
 def fetch_all_warranties() -> dict:
     return {
         code: {
@@ -384,3 +376,11 @@ def fetch_all_warranties() -> dict:
         }
         for code, name in warranty_tender_cmap()
     }
+
+
+if __name__ == '__main__':
+    import sys
+    args = sys.argv
+
+    if args and args[1] == 'refresh':
+        save_snapshot()
