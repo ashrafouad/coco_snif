@@ -2,6 +2,9 @@ import json
 import time
 from pprint import pprint
 from typing import Any
+from datetime import datetime
+import psutil
+import ctypes
 
 from urllib3 import PoolManager
 
@@ -14,7 +17,29 @@ http = PoolManager()
 
 LOG_FILE = "watch.log"
 
+def active_network():
+    addresses = psutil.net_if_addrs()
+    stats = psutil.net_if_stats()
+    available_networks = []
 
+    for intface, addr_list in addresses.items():
+        if any(getattr(addr, "address").startswith("169.254") for addr in addr_list):
+            continue
+        elif intface in stats and getattr(stats[intface], "isup"):
+            available_networks.append(intface)
+
+    networklsit = available_networks
+
+    if "Ethernet" in networklsit:
+        return "ethernet"
+    elif "Wi-Fi" in networklsit:
+        return "Wi-Fi"
+    
+def Mbox(title, text, style):
+    result = ctypes.windll.user32.MessageBoxW(0, text, title, style)
+    if result == 2:  # 1 corresponds to  "OK" 2 to "Canceled"
+        exit()
+    
 def basic_str(obj):
     if isinstance(obj, str):
         return obj
@@ -246,7 +271,7 @@ def run_server():
                         ]
 
                         if not new_tender:
-                            from datetime import datetime
+                            # from datetime import datetime
 
                             new_tender = f"The tender {ministry_name}::{tender_id} no longer exists as of {datetime.now()}"
 
@@ -285,7 +310,7 @@ def run_server():
                                 ]
 
                                 if not new_tender:
-                                    from datetime import datetime
+                                    # from datetime import datetime
 
                                     new_tender = f"The tender {ministry_name}::{tender_id} no longer exists as of {datetime.now()}"
 
@@ -314,9 +339,18 @@ def run_server():
         else:
             print("Nothing new.")
         change = False
-        print("Going to sleep")
-        time.sleep(60 * 5)
+        sleep_minutes = 30
+        print(f"Going to sleep @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for {sleep_minutes} Minutes")
+        time.sleep(sleep_minutes * 60)
 
 
 if __name__ == "__main__":
-    run_server()
+    while True:
+        if active_network() == "Wi-Fi":
+            run_server()
+        else:
+            Mbox(
+                "Ethernet cable is connected",
+                "Disconnect the ethernet cable to run",
+                0,
+            )
