@@ -339,7 +339,7 @@ def run_server():
         else:
             print("Nothing new.")
         change = False
-        sleep_minutes = 30
+        sleep_minutes = 10
         print(f"Going to sleep @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for {sleep_minutes} Minutes")
         time.sleep(sleep_minutes * 60)
 
