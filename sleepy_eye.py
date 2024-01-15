@@ -2,7 +2,7 @@ import json
 import time
 from pprint import pprint
 from typing import Any
-from datetime import datetime
+from datetime import datetime ,timedelta
 import psutil
 import ctypes
 
@@ -181,7 +181,7 @@ def notify_by_mail(
     <style> {GLOBAL_STYLE} </style>
 </head>
 <body>
-<h1>{ministry_name} :: {tender_id}</h1>
+<h2>{ministry_name} :: {tender_id}</h2>
 
 <p>The Tender/Warranty of "{internal_id}" had changed</p>
 
@@ -339,9 +339,20 @@ def run_server():
         else:
             print("Nothing new.")
         change = False
-        sleep_minutes = 10
+        sleep_minutes = 20
         print(f"Going to sleep @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for {sleep_minutes} Minutes")
+        next_backup = (datetime.now() + timedelta(minutes = sleep_minutes)).strftime('%Y-%m-%d %H:%M:%S')
+        print(f"Next backup @    {next_backup}")
         time.sleep(sleep_minutes * 60)
+        while True:
+            if active_network() == "Wi-Fi":
+                break
+            else:
+                Mbox(
+                    "Ethernet cable is connected",
+                    "Disconnect the ethernet cable to run",
+                    0,
+                )
 
 
 if __name__ == "__main__":
