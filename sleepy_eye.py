@@ -339,10 +339,10 @@ def run_server():
         else:
             print("Nothing new.")
         change = False
-        sleep_minutes = 20
-        print(f"Going to sleep @ {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} for {sleep_minutes} Minutes")
-        next_backup = (datetime.now() + timedelta(minutes = sleep_minutes)).strftime('%Y-%m-%d %H:%M:%S')
-        print(f"Next backup @    {next_backup}")
+        sleep_minutes = 60
+        print(f"Paused     @ {datetime.now().strftime('%H:%M:%S')} for {sleep_minutes} Minutes")
+        next_backup = (datetime.now() + timedelta(minutes = sleep_minutes)).strftime('%H:%M:%S')
+        print(f"Next Check @ {next_backup}")
         time.sleep(sleep_minutes * 60)
         while True:
             if active_network() == "Wi-Fi":
