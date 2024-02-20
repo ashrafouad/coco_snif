@@ -16,7 +16,6 @@ from str_metric.levenshtein import html_output
 http = PoolManager()
 
 LOG_FILE = "watch.log"
-
 def active_network():
     addresses = psutil.net_if_addrs()
     stats = psutil.net_if_stats()
